@@ -41,6 +41,11 @@ return {
     terminal = {
       win = {
         position = "float",
+        title = " Terminal ",
+        title_pos = "center",
+        border = "rounded",
+        width = 0.9,
+        height = 0.8,
       },
     },
   },
