@@ -29,16 +29,9 @@ return {
     "seblyng/roslyn.nvim",
     -- :help roslyn.nvim for full options
     opts = {
-      -- Let Roslyn do file watching (helps with large solutions)
-      filewatching = "roslyn", -- "auto" | "roslyn" | "off"
-      -- Search parent dirs for .sln if you open a child path
+      filewatching = "roslyn",
       broad_search = true,
-      -- Example: prefer a specific solution automatically
-      -- choose_target = function(targets)
-      --   return vim.iter(targets):find(function(t) return t:match("MyApp%.sln$") end)
-      -- end,
-      -- Example: Language server settings
-      -- (Same format you'd pass to lspconfig; name is "roslyn")
+      debug = true, -- Enable debug logging to ~/.local/state/nvim/roslyn.log
     },
     config = function(_, opts)
       require("roslyn").setup(opts)
@@ -46,6 +39,13 @@ return {
       -- Place LS-specific settings here if you want:
       -- (inlay hints, code lens, formatting, etc.)
       vim.lsp.config("roslyn", {
+        on_attach = function(client, bufnr)
+          -- Debug: print solution info
+          vim.notify(
+            string.format("Roslyn attached. Solution: %s", vim.g.roslyn_nvim_selected_solution or "none"),
+            vim.log.levels.INFO
+          )
+        end,
         settings = {
           ["csharp|inlay_hints"] = {
             csharp_enable_inlay_hints_for_implicit_variable_types = true,
